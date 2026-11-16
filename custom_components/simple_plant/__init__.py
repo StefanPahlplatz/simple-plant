@@ -115,6 +115,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
+    # Notes used to be stored by a text entity; move them into the entry
+    if "notes" not in entry.data:
+        stored = await coordinator.store.async_get_data(coordinator.device)
+        old_notes = stored.get(f"{DOMAIN}_notes_{coordinator.device}", "")
+        hass.config_entries.async_update_entry(
+            entry, data={**entry.data, "notes": old_notes}
+        )
+
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))

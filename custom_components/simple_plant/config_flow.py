@@ -27,7 +27,6 @@ from .const import (
     HEALTH_OPTIONS,
     IMAGES_MIME_TYPES,
     LOGGER,
-    NOTES_MAX_LENGTH,
     STORAGE_DIR,
 )
 
@@ -140,7 +139,9 @@ def user_form() -> vol.Schema:
     )
 
 
-def option_form(suggested_species: str | None = None) -> vol.Schema:
+def option_form(
+    suggested_species: str | None = None, notes: str | None = None
+) -> vol.Schema:
     """Return a device reconfiguration form."""
     LOGGER.debug("option_flow, 1st call : displaying form")
     return vol.Schema(
@@ -160,6 +161,11 @@ def option_form(suggested_species: str | None = None) -> vol.Schema:
             vol.Optional(
                 "remove_fertilization", default=False
             ): selector.BooleanSelector(),
+            vol.Optional(
+                "notes", description={"suggested_value": notes or ""}
+            ): selector.TextSelector(
+                selector.TextSelectorConfig(multiline=True, multiple=False)
+            ),
         }
     )
 
@@ -183,9 +189,7 @@ class SimplePlantFlowHandler(ConfigFlow, domain=DOMAIN):  # pylint: disable=abst
         """Get options flow for this handler."""
         return SimplePlantOptionFlowHandler(config_entry)
 
-    async def async_step_user(  # noqa: PLR0911
-        self, user_input: dict | None = None
-    ) -> ConfigFlowResult:
+    async def async_step_user(self, user_input: dict | None = None) -> ConfigFlowResult:
         """
         Provide Base Plant information Config Flow.
 
@@ -207,13 +211,6 @@ class SimplePlantFlowHandler(ConfigFlow, domain=DOMAIN):  # pylint: disable=abst
                 errors={"base": "name_exist"},
             )
         user_input["name_by_user"] = user_input["name"]
-        # Verify notes fit in an entity state
-        if len(user_input.get("notes") or "") > NOTES_MAX_LENGTH:
-            return self.async_show_form(
-                step_id="user",
-                data_schema=user_form(),
-                errors={"base": "notes_too_long"},
-            )
         # Verify date
         if "last_watered" in user_input:
             date = as_utc(as_local(datetime.fromisoformat(user_input["last_watered"])))
@@ -272,7 +269,7 @@ class SimplePlantOptionFlowHandler(OptionsFlow):
         1st call = return form to show
         2nd call = return form with user input
         """
-        form = option_form(self.entry.data.get("species"))
+        form = option_form(self.entry.data.get("species"), self.entry.data.get("notes"))
 
         if user_input is None:
             # 1st call
@@ -294,6 +291,9 @@ class SimplePlantOptionFlowHandler(OptionsFlow):
                     step_id="user",
                     errors={"base": "upload_failed_type"},
                 )
+
+        # Notes: an emptied field is left out of user_input, which clears them
+        self.user_inputs["notes"] = user_input.get("notes", "")
 
         # Handle fertilization
         if user_input.get("remove_fertilization"):

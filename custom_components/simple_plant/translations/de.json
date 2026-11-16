@@ -12,7 +12,7 @@
                     "species": "Art/Sorte Ihrer Pflanze (Optional)",
                     "last_fertilized": "Zuletzt gedüngt (Optional)",
                     "days_between_fertilizations": "Tage zwischen den Düngungen (Optional)",
-                    "notes": "Notizen (Optional, max. 255 Zeichen)"
+                    "notes": "Notizen (Optional)"
                 }
             }
         },
@@ -21,8 +21,7 @@
             "name_exist": "Eine Pflanze mit diesem Namen existiert bereits.",
             "upload_failed_generic": "Datei-Upload fehlgeschlagen, es ist ein Fehler aufgetreten.",
             "upload_failed_type": "Datei-Upload fehlgeschlagen, der Dateityp wird nicht unterstützt.",
-            "unknown": "Unbekannter Fehler aufgetreten.",
-            "notes_too_long": "Notizen sind auf 255 Zeichen begrenzt."
+            "unknown": "Unbekannter Fehler aufgetreten."
         },
         "abort": {
             "already_configured": "Dieser Eintrag ist bereits konfiguriert."
@@ -36,7 +35,8 @@
                     "photo": "Foto",
                     "species": "Art/Sorte Ihrer Pflanze (Optional)",
                     "days_between_fertilizations": "Tage zwischen den Düngungen (leer lassen, um zu überspringen)",
-                    "remove_fertilization": "Düngungsplan entfernen"
+                    "remove_fertilization": "Düngungsplan entfernen",
+                    "notes": "Notizen (Optional)"
                 }
             }
         },
@@ -113,9 +113,7 @@
             },
             "plants_to_fertilize": {
                 "name": "Pflanzen zu düngen"
-            }
-        },
-        "text": {
+            },
             "notes": {
                 "name": "Notizen"
             }

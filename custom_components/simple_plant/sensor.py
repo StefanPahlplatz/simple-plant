@@ -17,8 +17,8 @@ from homeassistant.helpers.event import (
 )
 from homeassistant.util.dt import as_local
 
-from .const import DOMAIN, LOGGER
-from .entity import SimplePlantTrackedEntity
+from .const import DOMAIN, LOGGER, NOTES_MAX_LENGTH
+from .entity import SimplePlantEntity, SimplePlantTrackedEntity
 
 if TYPE_CHECKING:
     from datetime import date, datetime
@@ -46,6 +46,12 @@ FERTILIZATION_DESCRIPTIONS = (
     ),
 )
 
+NOTES_DESCRIPTION = SensorEntityDescription(
+    key="notes",
+    translation_key="notes",
+    icon="mdi:note-text-outline",
+)
+
 COLOR_MAPPING = {"Today": "Goldenrod", "Late": "Tomato"}
 
 
@@ -59,6 +65,7 @@ async def async_setup_entry(
         SimplePlantSensor(hass, entry, entity_description)
         for entity_description in ENTITY_DESCRIPTIONS
     ]
+    entities.append(SimplePlantNotesSensor(hass, entry, NOTES_DESCRIPTION))
 
     if entry.data.get("days_between_fertilizations"):
         entities.extend(
@@ -73,6 +80,33 @@ async def async_setup_entry(
         entities.append(SimplePlantFertilizeCountSensor(hass))
 
     async_add_entities(entities)
+
+
+class SimplePlantNotesSensor(SimplePlantEntity, SensorEntity):
+    """
+    Plant notes, edited in the plant's Configure dialog.
+
+    The state is the first line (entity states are limited to 255 characters);
+    the full multi-line text is in the `notes` attribute.
+    """
+
+    _attr_should_poll = False
+    _unrecorded_attributes = frozenset({"notes"})
+
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        entry: ConfigEntry,
+        description: SensorEntityDescription,
+    ) -> None:
+        """Initialize the notes sensor."""
+        super().__init__(hass, entry, description, "sensor")
+        notes = str(entry.data.get("notes") or "")
+        first_line = notes.strip().split("\n", 1)[0].strip()
+        if len(first_line) > NOTES_MAX_LENGTH:
+            first_line = first_line[: NOTES_MAX_LENGTH - 1] + "…"
+        self._attr_native_value = first_line or None
+        self._attr_extra_state_attributes = {"notes": notes}
 
 
 class SimplePlantSensor(SimplePlantTrackedEntity, SensorEntity):

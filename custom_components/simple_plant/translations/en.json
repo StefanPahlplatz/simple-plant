@@ -12,7 +12,7 @@
                     "species": "Species/Variety of your plant (Optional)",
                     "last_fertilized": "Last time fertilized (Optional)",
                     "days_between_fertilizations": "Days between fertilizations (Optional)",
-                    "notes": "Notes (Optional, max 255 characters)"
+                    "notes": "Notes (Optional)"
                 }
             }
         },
@@ -21,8 +21,7 @@
             "name_exist": "Plant with this name already exist",
             "upload_failed_generic": "File upload failed, soomething went wrong.",
             "upload_failed_type": "File upload failed, the file type is not a supported image type.",
-            "unknown": "Unknown error occurred.",
-            "notes_too_long": "Notes are limited to 255 characters."
+            "unknown": "Unknown error occurred."
         },
         "abort": {
             "already_configured": "This entry is already configured."
@@ -31,12 +30,13 @@
     "options": {
         "step": {
             "init": {
-                "description": "Modify the species, picture, or fertilization schedule of your plant.",
+                "description": "Modify the species, picture, notes, or fertilization schedule of your plant.",
                 "data": {
                     "photo": "Photo",
                     "species": "Species/Variety of your plant (Optional)",
                     "days_between_fertilizations": "Days between fertilizations (leave empty to skip)",
-                    "remove_fertilization": "Remove fertilization schedule"
+                    "remove_fertilization": "Remove fertilization schedule",
+                    "notes": "Notes (Optional)"
                 }
             }
         },
@@ -113,9 +113,7 @@
             },
             "plants_to_fertilize": {
                 "name": "Plants to fertilize"
-            }
-        },
-        "text": {
+            },
             "notes": {
                 "name": "Notes"
             }
