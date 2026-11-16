@@ -102,6 +102,7 @@ class SimplePlantFertilizeTodo(SimplePlantBinarySensor):
     _fallback_value = False
     _tracked_date_key = "last_fertilized"
     _tracked_number_key = "days_between_fertilizations"
+    _tracked_winter_number_key = None
 
     async def _update_state(self, _event: Event | None = None) -> None:
         """Update the binary sensor state based on fertilization entities."""
@@ -123,6 +124,7 @@ class SimplePlantFertilizeProblem(SimplePlantBinarySensor):
     _fallback_value = False
     _tracked_date_key = "last_fertilized"
     _tracked_number_key = "days_between_fertilizations"
+    _tracked_winter_number_key = None
 
     async def _update_state(self, _event: Event | None = None) -> None:
         """Update the binary sensor state based on fertilization entities."""

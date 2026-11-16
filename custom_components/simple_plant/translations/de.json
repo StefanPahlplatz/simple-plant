@@ -12,7 +12,8 @@
                     "species": "Art/Sorte Ihrer Pflanze (Optional)",
                     "last_fertilized": "Zuletzt gedüngt (Optional)",
                     "days_between_fertilizations": "Tage zwischen den Düngungen (Optional)",
-                    "notes": "Notizen (Optional)"
+                    "notes": "Notizen (Optional)",
+                    "days_between_waterings_winter": "Tage zwischen Gießen im Herbst/Winter (Optional, 0 = gleich)"
                 }
             }
         },
@@ -86,6 +87,9 @@
             },
             "days_between_fertilizations": {
                 "name": "Tage zwischen den Düngungen"
+            },
+            "days_between_waterings_winter": {
+                "name": "Tage zwischen Gießen (Winter)"
             }
         },
         "select": {

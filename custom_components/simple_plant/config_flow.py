@@ -108,6 +108,14 @@ def user_form() -> vol.Schema:
                     unit_of_measurement="days",
                 ),
             ),
+            vol.Optional("days_between_waterings_winter"): selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=0,
+                    max=365,
+                    mode=selector.NumberSelectorMode.BOX,
+                    unit_of_measurement="days",
+                ),
+            ),
             vol.Required("health"): selector.SelectSelector(
                 selector.SelectSelectorConfig(
                     {

@@ -12,7 +12,8 @@
                     "species": "Espèce/Variété (Optionnel)",
                     "last_fertilized": "Dernière fertilisation (Optionnel)",
                     "days_between_fertilizations": "Jours entre chaque fertilisation (Optionnel)",
-                    "notes": "Notes (Optionnel)"
+                    "notes": "Notes (Optionnel)",
+                    "days_between_waterings_winter": "Jours entre arrosages en automne/hiver (Optionnel, 0 = identique)"
                 }
             }
         },
@@ -86,6 +87,9 @@
             },
             "days_between_fertilizations": {
                 "name": "Jours entre chaque fertilisation"
+            },
+            "days_between_waterings_winter": {
+                "name": "Jours entre arrosages (hiver)"
             }
         },
         "select": {

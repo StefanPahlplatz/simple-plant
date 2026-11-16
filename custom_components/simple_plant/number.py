@@ -32,7 +32,19 @@ ENTITY_DESCRIPTIONS = (
         native_step=0,
         native_unit_of_measurement=UnitOfTime.DAYS,
     ),
+    NumberEntityDescription(
+        key="days_between_waterings_winter",
+        translation_key="days_between_waterings_winter",
+        device_class=NumberDeviceClass.DURATION,
+        mode=NumberMode.BOX,
+        icon="mdi:snowflake",
+        native_step=0,
+        native_unit_of_measurement=UnitOfTime.DAYS,
+    ),
 )
+
+# 0 means "no separate winter interval": the regular one is used all year
+OPTIONAL_ZERO_KEYS = {"days_between_waterings_winter"}
 
 FERTILIZATION_DESCRIPTIONS = (
     NumberEntityDescription(
@@ -80,6 +92,9 @@ class SimplePlantNumber(SimplePlantStoredEntity, NumberEntity):  # pylint: disab
         """Initialize the number class."""
         super().__init__(hass, entry, description, "number")
         self._fallback_value = entry.data.get(description.key)
+        if description.key in OPTIONAL_ZERO_KEYS:
+            self._attr_native_min_value = 0
+            self._fallback_value = self._fallback_value or 0
         self._attr_native_value: float | None = None
 
     async def _restore_value(self, value: Any) -> None:

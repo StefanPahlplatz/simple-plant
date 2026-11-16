@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import TYPE_CHECKING, Any
 
 from homeassistant.exceptions import ServiceValidationError
@@ -200,12 +200,45 @@ class SimplePlantCoordinator(DataUpdateCoordinator[dict]):
 
         last_watered_date = datetime.fromisoformat(states["last_watered"])
         nb_days = float(states["nb_days"])
+        season = "summer"
+        if self.is_winter(as_local(utcnow()).date()):
+            winter_days = self._get_winter_days()
+            if winter_days:
+                nb_days = winter_days
+                season = "winter"
 
         return {
             "last_watered": last_watered_date,
             "next_watering": last_watered_date + timedelta(days=nb_days),
             "today": utcnow(),
+            "nb_days": nb_days,
+            "season": season,
         }
+
+    def is_winter(self, day: date) -> bool:
+        """
+        Return True between the autumn and spring equinox.
+
+        Uses fixed dates (22 Sep - 20 Mar), mirrored for the southern hemisphere.
+        """
+        month_day = (day.month, day.day)
+        northern_winter = month_day >= (9, 22) or month_day < (3, 20)
+        if self.hass.config.latitude < 0:
+            return not northern_winter
+        return northern_winter
+
+    def _get_winter_days(self) -> float | None:
+        """Return the winter interval, or None when it is not set (0)."""
+        state = self.hass.states.get(
+            self.get_entity_id("number", "days_between_waterings_winter")
+        )
+        if state is None:
+            return None
+        try:
+            value = float(state.state)
+        except ValueError:
+            return None
+        return value if value > 0 else None
 
     def get_fertilization_dates(self) -> dict[str, datetime] | None:
         """Get fertilization dates from relevant device entity states."""

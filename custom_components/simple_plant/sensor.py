@@ -161,6 +161,8 @@ class SimplePlantSensor(SimplePlantTrackedEntity, SensorEntity):
             }
         else:
             self._attr_extra_state_attributes = {"state_color": False}
+        self._attr_extra_state_attributes["days_between_waterings"] = dates["nb_days"]
+        self._attr_extra_state_attributes["season"] = dates["season"]
 
         # Value
         self._attr_native_value = next_watering
@@ -172,6 +174,7 @@ class SimplePlantFertilizationSensor(SimplePlantTrackedEntity, SensorEntity):
 
     _tracked_date_key = "last_fertilized"
     _tracked_number_key = "days_between_fertilizations"
+    _tracked_winter_number_key = None
 
     def __init__(
         self,
