@@ -13,6 +13,9 @@ DOMAIN = "simple_plant"
 
 STORAGE_DIR = "simple_plant"
 
+# Home Assistant limits entity states to 255 characters
+NOTES_MAX_LENGTH = 255
+
 MANUFACTURER = "Simple Plant"
 
 HEALTH_OPTIONS = [
@@ -43,4 +46,5 @@ PLATFORMS: list[Platform] = [
     Platform.NUMBER,
     Platform.SELECT,
     Platform.SENSOR,
+    Platform.TEXT,
 ]

@@ -11,7 +11,8 @@
                     "health": "Current health (Optional)",
                     "species": "Species/Variety of your plant (Optional)",
                     "last_fertilized": "Last time fertilized (Optional)",
-                    "days_between_fertilizations": "Days between fertilizations (Optional)"
+                    "days_between_fertilizations": "Days between fertilizations (Optional)",
+                    "notes": "Notes (Optional, max 255 characters)"
                 }
             }
         },
@@ -20,7 +21,8 @@
             "name_exist": "Plant with this name already exist",
             "upload_failed_generic": "File upload failed, soomething went wrong.",
             "upload_failed_type": "File upload failed, the file type is not a supported image type.",
-            "unknown": "Unknown error occurred."
+            "unknown": "Unknown error occurred.",
+            "notes_too_long": "Notes are limited to 255 characters."
         },
         "abort": {
             "already_configured": "This entry is already configured."
@@ -111,6 +113,11 @@
             },
             "plants_to_fertilize": {
                 "name": "Plants to fertilize"
+            }
+        },
+        "text": {
+            "notes": {
+                "name": "Notes"
             }
         }
     },

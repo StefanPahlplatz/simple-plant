@@ -22,7 +22,14 @@ from homeassistant.helpers import selector
 from homeassistant.util import slugify
 from homeassistant.util.dt import as_local, as_utc, utcnow
 
-from .const import DOMAIN, HEALTH_OPTIONS, IMAGES_MIME_TYPES, LOGGER, STORAGE_DIR
+from .const import (
+    DOMAIN,
+    HEALTH_OPTIONS,
+    IMAGES_MIME_TYPES,
+    LOGGER,
+    NOTES_MAX_LENGTH,
+    STORAGE_DIR,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -126,6 +133,9 @@ def user_form() -> vol.Schema:
                     unit_of_measurement="days",
                 ),
             ),
+            vol.Optional("notes"): selector.TextSelector(
+                selector.TextSelectorConfig(multiline=True, multiple=False)
+            ),
         }
     )
 
@@ -195,6 +205,13 @@ class SimplePlantFlowHandler(ConfigFlow, domain=DOMAIN):  # pylint: disable=abst
                 errors={"base": "name_exist"},
             )
         user_input["name_by_user"] = user_input["name"]
+        # Verify notes fit in an entity state
+        if len(user_input.get("notes") or "") > NOTES_MAX_LENGTH:
+            return self.async_show_form(
+                step_id="user",
+                data_schema=user_form(),
+                errors={"base": "notes_too_long"},
+            )
         # Verify date
         if "last_watered" in user_input:
             date = as_utc(as_local(datetime.fromisoformat(user_input["last_watered"])))
