@@ -183,7 +183,9 @@ class SimplePlantFlowHandler(ConfigFlow, domain=DOMAIN):  # pylint: disable=abst
         """Get options flow for this handler."""
         return SimplePlantOptionFlowHandler(config_entry)
 
-    async def async_step_user(self, user_input: dict | None = None) -> ConfigFlowResult:
+    async def async_step_user(  # noqa: PLR0911
+        self, user_input: dict | None = None
+    ) -> ConfigFlowResult:
         """
         Provide Base Plant information Config Flow.
 
